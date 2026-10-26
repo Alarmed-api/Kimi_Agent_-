@@ -2,13 +2,12 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
-
-# Устанавливаем tsx глобально для прямого запуска TypeScript кода
-RUN npm install -g tsx
+# Ставим библиотеки с флагом --include=dev, чтобы точно не потерять модули компиляции
+RUN npm install --include=dev
+# Принудительно накатываем Hono и tsx глобально, чтобы бэкенд запустился без сбоев
+RUN npm install -g hono tsx
 
 COPY . .
 
 EXPOSE 10000
-# Запускаем исходный файл boot.ts напрямую в реальном времени!
 CMD ["tsx", "api/boot.ts"]
