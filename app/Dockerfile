@@ -1,11 +1,10 @@
 FROM node:20-alpine
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
-# Устанавливаем TypeScript глобально внутри контейнера для сборки
-RUN npm install -g typescript
+# Устанавливаем абсолютно все зависимости (включая инструменты сборки)
+RUN npm italic --include=dev || npm install
 COPY . .
-# Компилируем проект напрямую через установленный TypeScript-компилятор
-RUN tsc
+# Возвращаем родную команду сборки от Kimi
+RUN npm run build
 EXPOSE 10000
 CMD ["npm", "start"]
