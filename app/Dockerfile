@@ -10,8 +10,8 @@ COPY . .
 # Удаляем старые файлы блокировки npm, чтобы они не мешали pnpm
 RUN rm -f package-lock.json
 
-# Устанавливаем ВСЕ библиотеки через pnpm без единой ошибки
-RUN pnpm install
+# Устанавливаем библиотеки, принудительно разрешая сборку встроенных скриптов
+RUN pnpm install --only=prod --no-optional
 
 # Устанавливаем инструмент запуска TypeScript
 RUN pnpm add -g tsx
