@@ -2,12 +2,11 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY package*.json ./
-# Ставим библиотеки с флагом --include=dev, чтобы точно не потерять модули компиляции
 RUN npm install --include=dev
-# Принудительно накатываем Hono и tsx глобально, чтобы бэкенд запустился без сбоев
-RUN npm install -g hono tsx
+RUN npm install -g tsx
 
 COPY . .
 
 EXPOSE 10000
-CMD ["tsx", "api/boot.ts"]
+# Магия: принудительно доустанавливаем hono локально в контейнер перед тем, как tsx начнет выполнять код boot.ts
+CMD ["sh", "-c", "npm install hono && tsx api/boot.ts"]
