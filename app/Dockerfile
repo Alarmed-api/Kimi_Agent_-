@@ -3,12 +3,12 @@ WORKDIR /app
 
 COPY package*.json ./
 RUN npm install
-RUN npm install -g typescript
+
+# Устанавливаем tsx глобально для прямого запуска TypeScript кода
+RUN npm install -g tsx
 
 COPY . .
 
-RUN tsc --skipLibCheck
-
 EXPOSE 10000
-# Запускаем скомпилированный бэкенд напрямую по его реальному пути
-CMD ["node", "dist/api/boot.js"]
+# Запускаем исходный файл boot.ts напрямую в реальном времени!
+CMD ["tsx", "api/boot.ts"]
