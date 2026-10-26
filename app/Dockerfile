@@ -7,8 +7,8 @@ RUN npm install -g typescript
 
 COPY . .
 
-# Запускаем компиляцию напрямую, чтобы увидеть все ошибки в консоли
 RUN tsc --skipLibCheck
 
 EXPOSE 10000
-CMD ["npm", "start"]
+# Запускаем скомпилированный бэкенд напрямую по его реальному пути
+CMD ["node", "dist/api/boot.js"]
