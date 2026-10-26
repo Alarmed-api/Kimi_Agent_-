@@ -1,9 +1,8 @@
 FROM node:20-alpine
 WORKDIR /app
 
-# Задаем переменные портов прямо внутри контейнера
-ENV PORT=10000
-ENV HOST=0.0.0.0
+# Устанавливаем системную утилиту socat для принудительной пересылки портов
+RUN apk add --no-cache socat
 
 RUN npm install -g pnpm
 COPY . .
@@ -13,5 +12,5 @@ RUN pnpm add tsx --ignore-scripts
 
 EXPOSE 10000
 
-# Запускаем, принудительно передавая порт 10000 в аргументы запуска tsx
-CMD ["npx", "tsx", "api/boot.ts", "--port", "10000", "0.0.0.0"]
+# Запускаем прокси (10000 -> 3000) параллельно с ИИ-ассистентом
+CMD socat TCP-LISTEN:10000,fork TCP:127.0.0.1:3000 & npx tsx api/boot.ts
