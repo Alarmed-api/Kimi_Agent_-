@@ -3,14 +3,12 @@ WORKDIR /app
 
 COPY package*.json ./
 RUN npm install
-
-# Устанавливаем TypeScript глобально для ручной сборки
 RUN npm install -g typescript
 
 COPY . .
 
-# Принудительно компилируем TypeScript в папку dist, игнорируя любые некритичные ошибки типов
-RUN tsc --skipLibCheck || true
+# Запускаем компиляцию напрямую, чтобы увидеть все ошибки в консоли
+RUN tsc --skipLibCheck
 
 EXPOSE 10000
 CMD ["npm", "start"]
